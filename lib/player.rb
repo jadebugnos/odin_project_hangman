@@ -8,7 +8,7 @@ class Player
   end
 
   def guess_word
-    puts "Guess: "
+    puts "Type your guess: "
     guess = validate_guess
     @guesses_history << guess
     guess

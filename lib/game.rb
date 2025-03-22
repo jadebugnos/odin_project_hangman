@@ -7,28 +7,32 @@ class Game
     @player = player
     @secret_word = @words.filter { |word| word.size.between?(5, 12) }.sample
     @blank_placeholders = Array.new(@secret_word.size, "__")
+    @guess_history = []
+    @tries = 6
   end
 
   def start_game
     game_intro
-    # choose_secret_word
-    game_loop
+    play_rounds
   end
 
-  def game_loop
-    p @secret_word
-    6.times do
-      display_secret_word
-      guess = @player.guess_word
-      compare_guess_to_word(guess)
+  def play_rounds
+    while @tries.positive?
+      run_game
+      if check_winning_condition
+        puts "🏆✨ You’ve won the game! ✨🏆"
+        break
+      end
     end
+    puts @secret_word
+    puts "👎🎭 You lost! Womp womp... 🎭👎" if @tries.zero?
   end
 
-  # def choose_secret_word
-  #   secret_word = @words.filter { |word| word.size.between?(5, 12) }.sample
-  #   @secret_word = secret_word.chars
-  #   p @secret_word
-  # end
+  def run_game
+    display_update
+    guess = @player.guess_word
+    check_guess(guess)
+  end
 
   def game_intro
     slow_print(GameInstructions::INSTRUCTIONS[:intro])
@@ -42,14 +46,35 @@ class Game
     puts
   end
 
-  def display_secret_word
+  def display_update
+    puts "#{@tries} tries remaining"
+    puts "Your guesses so far: "
+    puts @guess_history.join(" ")
     puts "Secret Word: "
     puts @blank_placeholders.join(" ")
   end
 
-  def compare_guess_to_word(guess)
+  def check_winning_condition
+    @secret_word.eql?(@blank_placeholders.join)
+  end
+
+  def check_guess(guess)
+    correct_guess = false
+
     @secret_word.each_char.with_index do |char, index|
-      @blank_placeholders[index] = guess if char == guess
+      if char == guess
+        @blank_placeholders[index] = guess
+        correct_guess = true
+      end
     end
+
+    if correct_guess
+      puts "Good guess!"
+    else
+      puts "Incorrect guess! Try again"
+      @tries -= 1
+    end
+
+    @guess_history << guess
   end
 end
