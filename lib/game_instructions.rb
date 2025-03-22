@@ -20,5 +20,5 @@ module GameInstructions
 
       Are you ready? Let’s play! 🚀
     TEXT
-  }
+  }.freeze
 end
