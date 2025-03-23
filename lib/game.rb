@@ -9,11 +9,13 @@ class Game
     @blank_placeholders = Array.new(@secret_word.size, "__")
     @guess_history = []
     @tries = 6
+    @first_game = true
   end
 
   def start_game
-    game_intro
+    game_intro if @first_game
     play_rounds
+    play_again?
   end
 
   def play_rounds
@@ -24,7 +26,7 @@ class Game
         break
       end
     end
-    puts @secret_word
+    puts "The Secret Word: #{@secret_word}"
     puts "👎🎭 You lost! Womp womp... 🎭👎" if @tries.zero?
   end
 
@@ -59,6 +61,11 @@ class Game
   end
 
   def check_guess(guess)
+    if @guess_history.include?(guess)
+      puts "You've already guessed #{guess}. Try another one"
+      return
+    end
+
     correct_guess = false
 
     @secret_word.each_char.with_index do |char, index|
@@ -76,5 +83,38 @@ class Game
     end
 
     @guess_history << guess
+  end
+
+  def reset_game
+    @secret_word = @words.filter { |word| word.size.between?(5, 12) }.sample
+    @blank_placeholders = Array.new(@secret_word.size, "__")
+    @guess_history = []
+    @tries = 6
+  end
+
+  def play_again?
+    answer = validate_answer
+
+    return false unless answer == "y"
+
+    reset_game
+    @first_game = false
+    start_game
+  end
+
+  def validate_answer
+    restart = ""
+
+    loop do
+      puts "do you want to play again? y/n"
+      restart = gets.chomp.downcase
+
+      raise "Invalid input! Please enter y or n" unless %w[y n].include?(restart)
+
+      break
+    rescue StandardError => e
+      puts e.message
+    end
+    restart
   end
 end
