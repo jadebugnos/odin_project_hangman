@@ -10,6 +10,7 @@ class Game
     @guess_history = []
     @tries = 6
     @first_game = true
+    @correct_guess = false
   end
 
   def start_game
@@ -66,23 +67,31 @@ class Game
       return
     end
 
-    correct_guess = false
+    update_blank_placeholder(guess)
+
+    give_feedback
+
+    @guess_history << guess
+  end
+
+  def update_blank_placeholder(guess)
+    @correct_guess = false
 
     @secret_word.each_char.with_index do |char, index|
       if char == guess
         @blank_placeholders[index] = guess
-        correct_guess = true
+        @correct_guess = true
       end
     end
+  end
 
-    if correct_guess
+  def give_feedback
+    if @correct_guess
       puts "Good guess!"
     else
       puts "Incorrect guess! Try again"
       @tries -= 1
     end
-
-    @guess_history << guess
   end
 
   def reset_game
