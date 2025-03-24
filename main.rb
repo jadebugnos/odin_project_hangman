@@ -1,5 +1,6 @@
 require "rubocop"
 require "pry-byebug"
+require "json"
 require_relative "lib/game"
 require_relative "lib/player"
 

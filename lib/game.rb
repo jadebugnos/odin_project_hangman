@@ -1,7 +1,12 @@
 require_relative "game_instructions"
+require_relative "serializable"
 
 # this file defines the game class logic
 class Game
+  include Serializable
+
+  attr_accessor :player, :secret_word, :blank_placeholders, :guess_history, :tries, :first_game, :correct_guess
+
   def initialize(words, player)
     @words = words
     @player = player
@@ -32,6 +37,7 @@ class Game
   end
 
   def run_game
+    save_game
     display_update
     guess = @player.guess_word
     check_guess(guess)
@@ -68,9 +74,7 @@ class Game
     end
 
     update_blank_placeholder(guess)
-
     give_feedback
-
     @guess_history << guess
   end
 
@@ -102,28 +106,12 @@ class Game
   end
 
   def play_again?
-    answer = validate_answer
+    answer = @player.validate_player_answer
 
     return false unless answer == "y"
 
     reset_game
     @first_game = false
     start_game
-  end
-
-  def validate_answer
-    restart = ""
-
-    loop do
-      puts "do you want to play again? y/n"
-      restart = gets.chomp.downcase
-
-      raise "Invalid input! Please enter y or n" unless %w[y n].include?(restart)
-
-      break
-    rescue StandardError => e
-      puts e.message
-    end
-    restart
   end
 end

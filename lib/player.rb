@@ -22,4 +22,20 @@ class Player
       puts "Error: Unexpected input! Please type a letter"
     end
   end
+
+  def validate_player_answer
+    restart = ""
+
+    loop do
+      puts "do you want to play again? y/n"
+      restart = gets.chomp.downcase
+
+      raise "Invalid input! Please enter y or n" unless %w[y n].include?(restart)
+
+      break
+    rescue StandardError => e
+      puts e.message
+    end
+    restart
+  end
 end
