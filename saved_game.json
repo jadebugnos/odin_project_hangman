@@ -1,1 +1,1 @@
-{"json_class":"Game","player":"#<Player:0x0000730ab00c8248>","secret_word":"sells","blank_placeholders":["s","__","__","__","s"],"guess_history":["s"],"tries":6,"first_game":true,"correct_guess":true}
+{"json_class":"Game","data":{"player":{"json_class":"Player","data":{"name":null,"guesses_history":["e","t","h","f"]}},"secret_word":"editor","blank_placeholders":["e","__","__","t","__","__"],"guess_history":["e","t","h","f"],"tries":4,"first_game":true,"correct_guess":false}}

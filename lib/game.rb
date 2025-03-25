@@ -7,18 +7,26 @@ class Game
 
   attr_accessor :player, :secret_word, :blank_placeholders, :guess_history, :tries, :first_game, :correct_guess
 
-  def initialize(words, player)
-    @words = words
+  def initialize(player, _secret_word = nil, _blank_placeholders = nil, guess_history = [], tries = 6, # rubocop:disable Metrics/ParameterLists
+                 first_game = true, correct_guess = false) # rubocop:disable Style/OptionalBooleanParameter
     @player = player
-    @secret_word = @words.filter { |word| word.size.between?(5, 12) }.sample
+    @secret_word = nil
+    @blank_placeholders = nil
+    @guess_history = guess_history
+    @tries = tries
+    @first_game = first_game
+    @correct_guess = correct_guess
+  end
+
+  def load_words
+    words = File.read(File.join(__dir__, "../words.txt")).strip.split
+    @secret_word = words.filter { |word| word.size.between?(5, 12) }.sample
     @blank_placeholders = Array.new(@secret_word.size, "__")
-    @guess_history = []
-    @tries = 6
-    @first_game = true
-    @correct_guess = false
   end
 
   def start_game
+    load_words
+    load_game
     game_intro if @first_game
     play_rounds
     play_again?

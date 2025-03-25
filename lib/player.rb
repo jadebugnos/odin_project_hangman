@@ -1,5 +1,7 @@
 # this file defines the player class logic
 class Player
+  include Serializable
+
   attr_accessor :name, :guesses_history
 
   def initialize
