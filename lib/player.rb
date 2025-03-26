@@ -4,16 +4,13 @@ class Player
 
   attr_accessor :name, :guesses_history
 
-  def initialize
-    @name = nil
-    @guesses_history = []
+  def initialize(name = nil)
+    @name = name || "word breaker"
   end
 
   def guess_word
     puts "Type your guess: "
-    guess = validate_guess
-    @guesses_history << guess
-    guess
+    validate_guess
   end
 
   def validate_guess

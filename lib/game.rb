@@ -7,15 +7,14 @@ class Game
 
   attr_accessor :player, :secret_word, :blank_placeholders, :guess_history, :tries, :first_game, :correct_guess
 
-  def initialize(player, _secret_word = nil, _blank_placeholders = nil, guess_history = [], tries = 6, # rubocop:disable Metrics/ParameterLists
-                 first_game = true, correct_guess = false) # rubocop:disable Style/OptionalBooleanParameter
+  def initialize(player)
     @player = player
     @secret_word = nil
     @blank_placeholders = nil
-    @guess_history = guess_history
-    @tries = tries
-    @first_game = first_game
-    @correct_guess = correct_guess
+    @guess_history = []
+    @tries = 6
+    @first_game = true
+    @correct_guess = false
   end
 
   def load_words
@@ -26,8 +25,10 @@ class Game
 
   def start_game
     load_words
-    load_game
-    game_intro if @first_game
+    if @first_game
+      load_game
+      game_intro
+    end
     play_rounds
     play_again?
   end
@@ -107,19 +108,19 @@ class Game
   end
 
   def reset_game
-    @secret_word = @words.filter { |word| word.size.between?(5, 12) }.sample
-    @blank_placeholders = Array.new(@secret_word.size, "__")
     @guess_history = []
     @tries = 6
   end
 
   def play_again?
     answer = @player.validate_player_answer
-
-    return false unless answer == "y"
-
-    reset_game
-    @first_game = false
-    start_game
+    if answer == "y"
+      reset_game
+      @first_game = false
+      start_game
+    else
+      puts "Thanks for playing!"
+      exit # Exits the program
+    end
   end
 end
