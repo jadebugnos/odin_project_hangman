@@ -34,9 +34,14 @@ end
   end
 
   # Saves the current game state by writing its JSON representation to a file.
-  def save_game
+  def save_game(save_type)
     save_file
-    puts "progress automatic save successful."
+    case save_type
+    when :auto_save
+      puts "Automatic progress save successful."
+    when :player_save
+      puts "The game was saved successfully."
+    end
   end
 
   # Writes the serialized game data to 'saved_game.json'.
@@ -58,6 +63,7 @@ end
     else
       puts "Creating new game..."
     end
+    :load
   end
 
   # Asks the user for validation on a given mode (load or other).

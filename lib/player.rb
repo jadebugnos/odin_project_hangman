@@ -9,16 +9,20 @@ class Player
   end
 
   def guess_word
-    puts "Type your guess: "
+    puts "Type a letter or type 'save' to save or 'exit' to quit: "
     validate_guess
   end
 
   def validate_guess
     loop do
-      guess = gets.chomp.downcase
-      return guess if guess.size == 1 && ("a".."z").include?(guess)
-
-      puts "Error: Unexpected input! Please type a letter"
+      guess = gets.chomp.strip.downcase
+      if %w[save exit].include?(guess)
+        guess == "save" ? save_game(:player_save) : exit
+      elsif guess.size == 1 && ("a".."z").include?(guess)
+        return guess
+      else
+        puts "Error: Unexpected input! Please type a letter"
+      end
     end
   end
 

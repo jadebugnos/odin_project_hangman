@@ -2,7 +2,7 @@ require_relative "game_instructions"
 require_relative "serializable"
 
 # this file defines the game class logic
-class Game
+class Game # rubocop:disable Metrics/ClassLength
   include Serializable
 
   attr_accessor :player, :secret_word, :blank_placeholders, :guess_history, :tries, :first_game, :correct_guess
@@ -13,7 +13,7 @@ class Game
     @blank_placeholders = nil
     @guess_history = []
     @tries = 6
-    @first_game = true
+    @game_state = :new
     @correct_guess = false
   end
 
@@ -25,9 +25,9 @@ class Game
 
   def start_game
     load_words
-    if @first_game
-      load_game
-      game_intro
+    if @game_state == :new
+      mode = load_game
+      game_intro(mode)
     end
     play_rounds
     play_again?
@@ -46,14 +46,14 @@ class Game
   end
 
   def run_game
-    save_game
+    save_game(:auto_save)
     display_update
     guess = @player.guess_word
     check_guess(guess)
   end
 
-  def game_intro
-    slow_print(GameInstructions::INSTRUCTIONS[:intro])
+  def game_intro(mode)
+    slow_print(GameInstructions::INSTRUCTIONS[:intro]) unless mode == :load
   end
 
   def slow_print(text)
@@ -110,13 +110,13 @@ class Game
   def reset_game
     @guess_history = []
     @tries = 6
+    @game_state = :replay
   end
 
   def play_again?
     answer = @player.validate_player_answer
     if answer == "y"
       reset_game
-      @first_game = false
       start_game
     else
       puts "Thanks for playing!"
