@@ -53,7 +53,9 @@ class Game # rubocop:disable Metrics/ClassLength
   end
 
   def game_intro(mode)
-    slow_print(GameInstructions::INSTRUCTIONS[:intro]) unless mode == :load
+    return unless mode == :new
+
+    slow_print(GameInstructions::INSTRUCTIONS[:intro])
   end
 
   def slow_print(text)

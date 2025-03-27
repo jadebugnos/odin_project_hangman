@@ -24,7 +24,7 @@ end
     # Creates an object from JSON data.
     # Uses allocate to create an object without calling the initialize method.
     def json_create(data)
-      obj = allocate # allocate creates a new object without invoking initialize
+      obj = allocate
       data["data"].each do |var, value|
         # Set each instance variable with the corresponding value from the JSON data
         obj.instance_variable_set("@#{var}", value)
@@ -60,10 +60,12 @@ end
       restored_obj.instance_variables.each do |var|
         instance_variable_set(var, restored_obj.instance_variable_get(var))
       end
+      puts "Welcome back! Ready to pick up where we left off?"
+      :load
     else
       puts "Creating new game..."
+      :new
     end
-    :load
   end
 
   # Asks the user for validation on a given mode (load or other).

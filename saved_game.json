@@ -1,1 +1,1 @@
-{"json_class":"Game","data":{"player":{"json_class":"Player","data":{"name":"jade"}},"secret_word":"globe","blank_placeholders":["__","__","__","__","__"],"guess_history":[],"tries":6,"game_state":"new","correct_guess":false}}
+{"json_class":"Game","data":{"player":{"json_class":"Player","data":{"name":"jade"}},"secret_word":"class","blank_placeholders":["__","__","__","__","__"],"guess_history":[],"tries":6,"game_state":"new","correct_guess":false}}
